@@ -11,9 +11,11 @@ export default class UserConcept {
   public readonly users = new DocCollection<UserDoc>("users");
 
   async getById(_id: ObjectId) {
-    // TODO 1: Implement this method
-    // Hint: check out this.users.readOne
-    throw new Error("Not implemented!");
+    const user = await this.users.readOne({ id: _id });
+    if (!user) {
+      throw new NotFoundError("User not found.");
+    }
+    return { msg: "User found.", _id: user._id };
   }
 
   async create(username: string, password: string) {
@@ -23,9 +25,7 @@ export default class UserConcept {
   }
 
   async update(_id: ObjectId, update: Partial<UserDoc>) {
-    // TODO 2: Implement this method
-    // Hint: check out this.users.updateOne
-    throw new Error("Not implemented!");
+    return { msg: "User updated.", user: await this.users.updateOne({ id: _id }, update) };
   }
 
   // Sanitizes user object by removing password field
